@@ -8,8 +8,8 @@ import Context from '../App/Context'
 import './NoteListMain.css'
 
 export default class NoteListMain extends React.Component {
-
   static contextType = Context
+  afterDelete = () => { }
 
   render() {
     const { notes, folders } = this.context;
@@ -29,6 +29,7 @@ export default class NoteListMain extends React.Component {
                 id={note.id}
                 name={note.name}
                 modified={note.modified}
+                afterDelete={this.afterDelete}
               />
             </li>
           )}

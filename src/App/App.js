@@ -12,19 +12,25 @@ import Context from './Context'
 
 class App extends Component {
 
-    handleDeleteNote = (note) => 
-    {
-        const newNotes = this.state.notes.filter(page => (note.id !== page.id ))
-        this.setState({
-            notes:[newNotes]
-        }) 
-    }
 
-    
+
+
     state = {
         notes: [],
         folders: [],
     };
+
+    handleDeleteNote = (id) => {
+
+        const newNotes = this.state.notes.filter(page => (id !== page.id))
+        console.log(newNotes)
+        this.setState({
+            notes: newNotes
+        })
+
+
+
+    }
 
 
 
@@ -32,27 +38,27 @@ class App extends Component {
         // fake date loading from API call
         // setTimeout(() => this.setState(dummyStore), 600);
         fetch('http://localhost:9090/folders')
-        .then((response) => {
-            return response.json();
-        })
-        .then((data) => {
-            this.setState({
-                folders: data,
+            .then((response) => {
+                return response.json();
             })
-        });
+            .then((data) => {
+                this.setState({
+                    folders: data,
+                })
+            });
 
         fetch('http://localhost:9090/notes')
-        .then((response) => {
-            return response.json();
-        })
-        .then((data) => {
-            this.setState({ notes: data})
-           
-        });
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                this.setState({ notes: data })
+
+            });
     }
 
-        
-    
+
+
 
     renderNavRoutes() {
 
@@ -63,7 +69,9 @@ class App extends Component {
                         exact
                         key={path}
                         path={path}
-                        component={NoteListNav}
+                        render={(routeProps) => {
+                            return <NoteListNav handleDeleteNote={this.handleDeleteNote} {...routeProps} />
+                        }}
 
                     />
                 ))}
@@ -86,20 +94,22 @@ class App extends Component {
                         exact
                         key={path}
                         path={path}
-                        component={NoteListMain}
+                        render={(routeProps) => {
+                            return <NoteListMain handleDeleteNote={this.handleDeleteNote} {...routeProps} />
+                        }}
 
                     />
                 ))}
                 <Route
                     path="/note/:noteId"
-                    
-                    
-                    render= {(routeProps) => {
-                        return <NotePageMain handleDeleteNote = {this.handleDeleteNote} {...routeProps} />
-                
-                        
+
+
+                    render={(routeProps) => {
+                        return <NotePageMain handleDeleteNote={this.handleDeleteNote} {...routeProps} />
+
+
                     }}
-        
+
                 />
             </>
         );
@@ -109,7 +119,8 @@ class App extends Component {
         return (
             <Context.Provider value={{
                 notes: this.state.notes,
-                folders: this.state.folders
+                folders: this.state.folders,
+                handleDeleteNote: this.handleDeleteNote
             }} >
                 <div className="App">
                     <nav className="App__nav">{this.renderNavRoutes()}</nav>
