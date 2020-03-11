@@ -75,11 +75,7 @@ class App extends Component {
                 <Route
                     path="/note/:noteId"
                     component={NotePageMain}
-                // render={routeProps => {
-                //     const { noteId } = routeProps.match.params;
-                //     const note = findNote(notes, noteId);
-                //     return <NotePageMain {...routeProps} note={note} />;
-                // }}
+        
                 />
             </>
         );
