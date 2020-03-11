@@ -21,8 +21,27 @@ class App extends Component {
 
     componentDidMount() {
         // fake date loading from API call
-        setTimeout(() => this.setState(dummyStore), 600);
+        // setTimeout(() => this.setState(dummyStore), 600);
+        fetch('http://localhost:9090/folders')
+        .then((response) => {
+            return response.json();
+        })
+        .then((data) => {
+            this.setState({
+                folders: data,
+            })
+        });
+
+        fetch('http://localhost:9090/notes')
+        .then((response) => {
+            return response.json();
+        })
+        .then((data) => {
+            this.setState({ notes: data})
+           
+        });
     }
+    
 
     renderNavRoutes() {
 
