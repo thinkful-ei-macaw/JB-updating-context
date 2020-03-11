@@ -12,11 +12,20 @@ import Context from './Context'
 
 class App extends Component {
 
+    handleDeleteNote = (note) => 
+    {
+        const newNotes = this.state.notes.filter(page => (note.id !== page.id ))
+        this.setState({
+            notes:[newNotes]
+        }) 
+    }
 
+    
     state = {
         notes: [],
-        folders: []
+        folders: [],
     };
+
 
 
     componentDidMount() {
@@ -41,6 +50,8 @@ class App extends Component {
            
         });
     }
+
+        
     
 
     renderNavRoutes() {
@@ -76,24 +87,18 @@ class App extends Component {
                         key={path}
                         path={path}
                         component={NoteListMain}
-                    // render={routeProps => {
-                    //     const { folderId } = routeProps.match.params;
-                    //     const notesForFolder = getNotesForFolder(
-                    //         notes,
-                    //         folderId
-                    //     );
-                    //     return (
-                    //         <NoteListMain
-                    //             {...routeProps}
-                    //             notes={notesForFolder}
-                    //         />
-                    //     );
-                    // }}
+
                     />
                 ))}
                 <Route
                     path="/note/:noteId"
-                    component={NotePageMain}
+                    
+                    
+                    render= {(routeProps) => {
+                        return <NotePageMain handleDeleteNote = {this.handleDeleteNote} {...routeProps} />
+                
+                        
+                    }}
         
                 />
             </>
